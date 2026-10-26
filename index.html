@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nexogon — Prototype</title>
+<style>
+:root{--bg:#09111f;--panel:#111f34;--panel2:#172a43;--cyan:#59e3ff;--gold:#ffd66b;--text:#f4f8ff;--muted:#a8bad2;--green:#78f0b1}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#17314e 0,#09111f 60%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+header{padding:18px 16px 10px;max-width:1000px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.logo{font-size:1.45rem;font-weight:900;letter-spacing:1px}.logo span{color:var(--cyan)}.tag{color:var(--muted);font-size:.8rem}
+main{max-width:1000px;margin:auto;padding:10px 16px 32px}.topbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 18px}
+.pill{border:1px solid #284562;border-radius:999px;padding:7px 12px;color:var(--muted);font-size:.85rem}
+h1{font-size:clamp(1.7rem,5vw,2.7rem);line-height:1.05;margin:10px 0}p{color:var(--muted);line-height:1.55}
+.panel{background:linear-gradient(145deg,#14263d,#0d192a);border:1px solid #29435e;border-radius:20px;padding:18px;box-shadow:0 16px 40px #0003}
+.layout{display:grid;grid-template-columns:1.15fr .85fr;gap:16px}.section-title{font-size:1.15rem;margin:0 0 8px}
+.starters{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.card{background:#0b1727;border:1px solid #2c4663;border-radius:16px;padding:10px;cursor:pointer;transition:.15s}
+.card.selected{border:2px solid var(--cyan);box-shadow:0 0 0 3px #59e3ff20}
+.card img{width:100%;aspect-ratio:1/1;object-fit:contain;border-radius:10px;background:#101e30}
+.card h3{margin:8px 0 2px}.small{font-size:.84rem;color:var(--muted)}
+button{background:var(--cyan);color:#06121e;border:0;border-radius:12px;padding:11px 14px;font-weight:800;font-size:.95rem;cursor:pointer}
+button.secondary{background:#203750;color:var(--text);border:1px solid #385674}button:disabled{opacity:.4;cursor:not-allowed}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.arena{min-height:245px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:radial-gradient(ellipse at center,#1d4161,#0a1728 70%);border-radius:16px;padding:16px;position:relative;overflow:hidden}
+.arena .emoji{font-size:4rem;filter:drop-shadow(0 0 14px #59e3ff66)}.arena strong{font-size:1.2rem}
+.log{background:#081321;border-radius:12px;padding:12px;margin-top:12px;min-height:72px;color:#c6d7eb;font-size:.9rem;line-height:1.5}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.stat{background:#0a1727;padding:10px;border-radius:12px;text-align:center}.stat b{display:block;color:var(--gold);font-size:1.1rem}.stat span{font-size:.75rem;color:var(--muted)}
+footer{text-align:center;color:#7187a1;font-size:.78rem;margin:24px 0 8px}
+@media(max-width:700px){.layout{grid-template-columns:1fr}.starters{grid-template-columns:1fr 1fr}header{align-items:flex-start;flex-direction:column}.panel{padding:14px}}
+</style>
+</head>
+<body>
+<header><div><div class="logo">NEXO<span>GON</span></div><div class="tag">Dunia Nexogon · Prototype awal</div></div><div class="pill">BUILD 0.1 · DEMO</div></header>
+<main>
+  <div class="topbar"><span class="pill">🌊 Wave Island</span><span class="pill">🎒 Beg: <b id="balls">3</b> Capture Ball</span><span class="pill">📘 Nexopedia: <b id="dex">0</b>/2</span></div>
+  <h1>Mulakan pengembaraan.</h1>
+  <p>Pilih Nexogon permulaan, teroka kawasan, dan cuba tangkap Nexogon liar. Ini demo kecil untuk uji rasa permainan — belum lagi game online penuh.</p>
+  <div class="layout">
+    <section class="panel">
+      <h2 class="section-title">01 / Pilih starter</h2>
+      <p class="small">Pilih satu Nexogon untuk ikut kau dalam pengembaraan.</p>
+      <div class="starters">
+        <div class="card" id="card-val" onclick="choose('val')">
+          <img src="valcovon.png" alt="Poster asal Valcovon">
+          <h3>Valcovon</h3><div class="small">🔥 Api / 🪨 Batu</div><div class="small">Common · Evolusi</div>
+        </div>
+        <div class="card" id="card-wad" onclick="choose('wad')">
+          <img src="waderspark.png" alt="Poster asal Waderspark">
+          <h3>Waderspark</h3><div class="small">💧 Air / ✨ Fairy</div><div class="small">Common · Wave Island</div>
+        </div>
+      </div>
+      <div class="actions"><button id="start" onclick="startGame()" disabled>Mulakan game</button><button class="secondary" onclick="resetGame()">Reset demo</button></div>
+    </section>
+    <section class="panel">
+      <h2 class="section-title">02 / Pulau pengembaraan</h2>
+      <div class="arena" id="arena"><div class="emoji">🏝️</div><strong>Wave Island</strong><p>Pilih starter untuk mula.</p></div>
+      <div class="stats">
+        <div class="stat"><b id="hp">—</b><span>Tenaga</span></div>
+        <div class="stat"><b id="atk">—</b><span>Serangan</span></div>
+        <div class="stat"><b id="caught">0</b><span>Ditangkap</span></div>
+      </div>
+      <div class="actions"><button class="secondary" id="explore" onclick="explore()" disabled>Teroka pulau</button><button class="secondary" id="capture" onclick="capture()" disabled>Guna Capture Ball</button></div>
+      <div class="log" id="log">Log: Pengembaraan kau akan muncul di sini.</div>
+    </section>
+  </div>
+  <footer>Nexogon © konsep asal pengguna · Prototype demo sahaja. Poster watak dipaparkan daripada fail asal yang dibekalkan.</footer>
+</main>
+<script>
+let selected=null, started=false, wild=false, balls=3, caughtSet=new Set();
+const mons={val:{name:"Valcovon",emoji:"🌋",hp:100,atk:70,def:50,element:"Api / Batu"},wad:{name:"Waderspark",emoji:"🌊",hp:85,atk:80,def:35,element:"Air / Fairy"}};
+function say(s){document.getElementById('log').textContent="Log: "+s}
+function choose(k){if(started)return;selected=k;document.getElementById('card-val').classList.toggle('selected',k==='val');document.getElementById('card-wad').classList.toggle('selected',k==='wad');document.getElementById('start').disabled=false;say(mons[k].name+" dipilih sebagai starter.")}
+function startGame(){if(!selected)return;started=true;const m=mons[selected];document.getElementById('start').disabled=true;document.getElementById('explore').disabled=false;document.getElementById('hp').textContent=m.hp;document.getElementById('atk').textContent=m.atk;document.getElementById('arena').innerHTML='<div class="emoji">'+m.emoji+'</div><strong>'+m.name+'</strong><p>Starter kau sudah bersedia!</p>';say("Kau memulakan perjalanan bersama "+m.name+". Teroka pulau untuk mencari Nexogon liar.");}
+function explore(){if(!started)return;wild=true;const name=selected==='val'?'Waderspark':'Valcovon';const emoji=selected==='val'?'🌊':'🌋';document.getElementById('arena').innerHTML='<div class="emoji">'+emoji+'</div><strong>'+name+' liar muncul!</strong><p>Ia nampak berjaga-jaga. Kau boleh cuba tangkap.</p>';document.getElementById('capture').disabled=false;say(name+" liar muncul di Wave Island. Pilih “Guna Capture Ball” untuk cuba menangkapnya.");}
+function capture(){if(!wild||balls<=0)return;balls--;document.getElementById('balls').textContent=balls;wild=false;document.getElementById('capture').disabled=true;const name=selected==='val'?'Waderspark':'Valcovon';const key=selected==='val'?'wad':'val';const success=Math.random()<0.72;if(success){caughtSet.add(key);document.getElementById('caught').textContent=caughtSet.size;document.getElementById('dex').textContent=caughtSet.size;say("Berjaya! "+name+" masuk ke Nexopedia kau.");document.getElementById('arena').innerHTML='<div class="emoji">✨</div><strong>'+name+' berjaya ditangkap!</strong><p>Nexopedia kau dikemas kini.</p>';}else{say(name+" terlepas! Cuba teroka lagi.");document.getElementById('arena').innerHTML='<div class="emoji">💨</div><strong>Nexogon terlepas</strong><p>Cuba cari lagi di pulau.</p>';}if(balls===0)document.getElementById('capture').disabled=true;}
+function resetGame(){selected=null;started=false;wild=false;balls=3;caughtSet=new Set();document.getElementById('balls').textContent=balls;document.getElementById('dex').textContent='0';document.getElementById('caught').textContent='0';document.getElementById('hp').textContent='—';document.getElementById('atk').textContent='—';document.getElementById('card-val').classList.remove('selected');document.getElementById('card-wad').classList.remove('selected');document.getElementById('start').disabled=true;document.getElementById('explore').disabled=true;document.getElementById('capture').disabled=true;document.getElementById('arena').innerHTML='<div class="emoji">🏝️</div><strong>Wave Island</strong><p>Pilih starter untuk mula.</p>';say("Demo direset. Pilih starter baru.");}
+</script>
+</body></html>
